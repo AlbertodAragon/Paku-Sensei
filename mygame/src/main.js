@@ -1,115 +1,208 @@
-import kaboom from "kaboom"
+import kaboom from "kaboom";
 
-import {FLOOR_HEIGHT, JUMP_FORCE, SPEED} from "../src/contants/constants"
+import {
+  MOVE_SPEED,
+  SLICER_SPEED,
+  SKELETOR_SPEED,
+} from "../src/contants/constants";
 
-// initialize context
-kaboom();
-
-// load assets
-loadSprite("bean", "sprites/bean.png");
-
-scene("game", () => {
-
-    // define gravity
-    setGravity(1600);
-
-    // add a game object to screen
-    const player = add([
-        // list of components
-        sprite("bean"),
-        pos(80, 40),
-        area(),
-        body(),
-    ]);
-
-    // floor
-    add([
-        rect(width(), FLOOR_HEIGHT),
-        outline(4),
-        pos(0, height()),
-        anchor("botleft"),
-        area(),
-        body({ isStatic: true }),
-        color(127, 200, 255),
-    ]);
-
-    function jump() {
-        if (player.isGrounded()) {
-            player.jump(JUMP_FORCE);
-        }
-    }
-
-    // jump when user press space
-    onKeyPress("space", jump);
-    onClick(jump);
-
-    function spawnTree() {
-
-        // add tree obj
-        add([
-            rect(48, rand(32, 96)),
-            area(),
-            outline(4),
-            pos(width(), height() - FLOOR_HEIGHT),
-            anchor("botleft"),
-            color(255, 180, 255),
-            move(LEFT, SPEED),
-            "tree",
-        ]);
-
-        // wait a random amount of time to spawn next tree
-        wait(rand(0.5, 1.5), spawnTree);
-
-    }
-
-    // start spawning trees
-    spawnTree();
-
-    // lose if player collides with any game obj with tag "tree"
-    player.onCollide("tree", () => {
-        // go to "lose" scene and pass the score
-        go("lose", score);
-        burp();
-        addKaboom(player.pos);
-    });
-
-    // keep track of score
-    let score = 0;
-
-    const scoreLabel = add([
-        text(score),
-        pos(24, 24),
-    ]);
-
-    // increment score every frame
-    onUpdate(() => {
-        score++;
-        scoreLabel.text = score;
-    });
-
+kaboom({
+  global: true,
+  fullscreen: true,
+  scale: 1,
+  debug: true,
+  clearColor: [0, 0, 0, 1],
 });
 
-scene("lose", (score) => {
+loadRoot("/sprites/");
+loadSprite("link-going-left", "1Xq9biB.png");
+loadSprite("link-going-right", "yZIb8O2.png");
+loadSprite("link-going-down", "r377FIM.png");
+loadSprite("link-going-up", "UkV0we0.png");
+loadSprite("left-wall", "rfDoaa1.png");
+loadSprite("top-wall", "QA257Bj.png");
+loadSprite("bottom-wall", "vWJWmvb.png");
+loadSprite("right-wall", "SmHhgUn.png");
+loadSprite("bottom-left-wall", "awnTfNC.png");
+loadSprite("bottom-right-wall", "84oyTFy.png");
+loadSprite("top-left-wall", "xlpUxIm.png");
+loadSprite("top-right-wall", "z0OmBd1.jpg");
+loadSprite("top-door", "U9nre4n.png");
+loadSprite("fire-pot", "I7xSp7w.png");
+loadSprite("left-door", "okdJNls.png");
+loadSprite("lanterns", "wiSiY09.png");
+loadSprite("slicer", "c6JFi5Z.png");
+loadSprite("skeletor", "Ei1VnX8.png");
+loadSprite("kaboom", "o9WizfI.png");
+loadSprite("stairs", "VghkL08.png");
+loadSprite("bg", "u4DVsx6.png");
 
-    add([
-        sprite("bean"),
-        pos(width() / 2, height() / 2 - 80),
-        scale(2),
-        anchor("center"),
-    ]);
+scene("game", ({ level, score }) => {
+  
+  add([sprite("bg")]);  
+  const maps = [
+    [
+      "ycc)cc9ccw",
+      "a        b",
+      "a      * b",
+      "a    (   b",
+      "%        b",
+      "a    (   b",
+      "a   *    b",
+      "a        b",
+      "xdd)dd)ddz",
+    ],
+    [
+      "yccccccccw",
+      "a        b",
+      ")        )",
+      "a        b",
+      "a        b",
+      "a    $   b",
+      ")   s    )",
+      "a        b",
+      "xddddddddz",
+    ],
+  ];
 
-    // display score
-    add([
-        text(score),
-        pos(width() / 2, height() / 2 + 80),
-        scale(2),
-        anchor("center"),
-    ]);
+  const levelCfg = {
+    tileWidth: 48,
+    tileHeight: 48,
+    tiles: {
+      "a": () => [sprite("left-wall"), area(), body({ isStatic: true }), "wall"],
+      "b": () => [sprite("right-wall"), area(), body({ isStatic: true }), "wall"],
+      "c": () => [sprite("top-wall"),area(), body({ isStatic: true }), "wall"],
+      "d": () => [sprite("bottom-wall"), area(),body({ isStatic: true }), "wall"],
+      "w": () => [sprite("top-right-wall"),area(), body({ isStatic: true }), "wall"],
+      "x": () => [sprite("bottom-left-wall"),area(), body({ isStatic: true }), "wall"],
+      "y": () => [sprite("top-left-wall"), area(),body({ isStatic: true }), "wall"],
+      "z": () => [sprite("bottom-right-wall"),area(), body({ isStatic: true }), "wall"],
+      "%": () => [sprite("left-door"), area(),body({ isStatic: true }), "door"],
+      "9": () => [sprite("top-door"),area(), "next-level"],
+      "$": () => [sprite("stairs"),area(), "next-level"],
+      "*": () => [sprite("slicer"),area(), "slicer", { dir: -1 }, "dangerous"],
+      "s": () => [
+        sprite("skeletor"),
+        area(),
+        "dangerous",
+        "skeletor",
+        { dir: -1, timer: 0 },
+      ],
+      ")": () => [sprite("lanterns"),area(), body({ isStatic: true }), "wall"],
+      "(": () => [sprite("fire-pot"),area(), body({ isStatic: true }), "wall"],
+    }
+  };
 
-    // go back to game with space is pressed
-    onKeyPress("space", () => go("game"));
-    onClick(() => go("game"));
+  addLevel(maps[level], levelCfg)
 
+  
+
+  const scoreLabel = add([
+    text("0"),
+    pos(400, 450),
+    {
+      value: score,
+    },
+    scale(2),
+  ]);
+
+  add([text("level " + parseInt(level + 1)), pos(450, 485), scale(2)]);
+
+  const player = add([
+    sprite("link-going-right"),
+    pos(5, 190),
+    area(),          // has a collider
+    body(), 
+    {
+      // right by default
+      dir: vec2(1, 0),
+    },
+  ]);
+
+  player.onCollide("next-level", () => {
+    go("game", {
+      level: (level + 1) % maps.length,
+      score: scoreLabel.value,
+    });
+  });
+
+  onKeyDown("left", () => {
+    player.use(sprite("link-going-left"));
+    player.move(-MOVE_SPEED, 0);
+    player.dir = vec2(-1, 0);
+  });
+
+  onKeyDown("right", () => {
+    player.use(sprite("link-going-right"));
+    player.move(MOVE_SPEED, 0);
+    player.dir = vec2(1, 0);
+  });
+
+  onKeyDown("up", () => {
+    player.use(sprite("link-going-up"));
+    player.move(0, -MOVE_SPEED);
+    player.dir = vec2(0, -1);
+  });
+
+  onKeyDown("down", () => {
+    player.use(sprite("link-going-down"));
+    player.move(0, MOVE_SPEED);
+    player.dir = vec2(0, 1);
+  });
+
+  function spawnKaboom(p) {
+    const obj = add([sprite("kaboom"), area(), pos(p), "kaboom"]);
+    wait(0.2, () => {
+      destroy(obj);
+    });
+  }
+
+  onKeyPress("space", () => {
+    spawnKaboom(player.pos.add(player.dir.scale(48)));
+  });
+
+  player.onCollide("door", (d) => {
+    destroy(d);
+  });
+
+  onCollideUpdate("kaboom", "skeletor", (k, s) => {
+    shake(4);
+    wait(1, () => {
+      destroy(k);
+    });
+    destroy(s);
+    scoreLabel.value++;
+    scoreLabel.text = scoreLabel.value;
+  });
+
+  onUpdate("slicer", (s) => {
+    s.move(s.dir * SLICER_SPEED, 0);
+  });
+
+  onCollide("slicer", "wall", (s) => {
+    s.dir = -s.dir;
+  });
+
+  onUpdate("skeletor", (s) => {
+    s.move(0, s.dir * SKELETOR_SPEED);
+    s.timer -= dt();
+    if (s.timer <= 0) {
+      s.dir = -s.dir;
+      s.timer = rand(5);
+    }
+  });
+
+  onCollide("skeletor", "wall", (s) => {
+    s.dir = -s.dir;
+  });
+
+  player.onCollide("dangerous", () => {
+    go("lose", { score: scoreLabel.value });
+  });
 });
 
-go("game");
+scene("lose", ({ score }) => {
+  add([text(score, 32), pos(width() / 2, height() / 2)]);
+});
+
+go("game", { level: 0, score: 0 });
