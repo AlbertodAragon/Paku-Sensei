@@ -1,8 +1,6 @@
 import kaboom from "kaboom"
 
-const FLOOR_HEIGHT = 48;
-const JUMP_FORCE = 800;
-const SPEED = 480;
+import {FLOOR_HEIGHT, JUMP_FORCE, SPEED} from "../src/contants/constants"
 
 // initialize context
 kaboom();
