@@ -22,3 +22,92 @@ export const maps = [
     "xddddddddz",
   ],
 ];
+
+export const levelCfg = {
+  tileWidth: 48,
+  tileHeight: 48,
+  tiles: {
+    a: () => [
+      sprite("left-wall"),
+      area({ scale: 0.9 }),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    b: () => [
+      sprite("right-wall"),
+      area({ scale: 0.9 }),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    c: () => [
+      sprite("top-wall"),
+      area({ scale: 0.9 }),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    d: () => [
+      sprite("bottom-wall"),
+      area(),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    w: () => [
+      sprite("top-right-wall"),
+      area(),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    x: () => [
+      sprite("bottom-left-wall"),
+      area(),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    y: () => [
+      sprite("top-left-wall"),
+      area(),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    z: () => [
+      sprite("bottom-right-wall"),
+      area(),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    "%": () => [
+      sprite("left-door"),
+      area(),
+      body({ isStatic: true }),
+      "door",
+    ],
+    9: () => [sprite("top-door"), area(), "next-level"],
+    $: () => [sprite("stairs"), area(), "next-level"],
+    "-": () => [
+      sprite("slicer"),
+      area({ scale: 0.9 }),
+      "slicer",
+      { dir: -1 },
+      "dangerous",
+    ],
+    s: () => [
+      sprite("skeletor"),
+      area(),
+      "dangerous",
+      "skeletor",
+      { dir: -1, timer: 0 },
+    ],
+    ")": () => [
+      sprite("lanterns"),
+      area({ scale: 0.9 }),
+      body({ isStatic: true }),
+      "wall",
+    ],
+    "(": () => [
+      sprite("fire-pot"),
+      area({ scale: 0.9 }),
+      body({ isStatic: true }),
+      "wall",
+    ],
+  },
+};
