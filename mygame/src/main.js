@@ -1,4 +1,6 @@
 import kaboom from "kaboom";
+import { loadSprites } from "./hooks/loadSprites.js";
+import { maps } from "./maps/maps.js";
 
 import {
   MOVE_SPEED,
@@ -14,88 +16,70 @@ kaboom({
   clearColor: [0, 0, 0, 1],
 });
 
-loadRoot("/sprites/");
-loadSprite("link-going-left", "1Xq9biB.png");
-loadSprite("link-going-right", "yZIb8O2.png");
-loadSprite("link-going-down", "r377FIM.png");
-loadSprite("link-going-up", "UkV0we0.png");
-loadSprite("left-wall", "rfDoaa1.png");
-loadSprite("top-wall", "QA257Bj.png");
-loadSprite("bottom-wall", "vWJWmvb.png");
-loadSprite("right-wall", "SmHhgUn.png");
-loadSprite("bottom-left-wall", "awnTfNC.png");
-loadSprite("bottom-right-wall", "84oyTFy.png");
-loadSprite("top-left-wall", "xlpUxIm.png");
-loadSprite("top-right-wall", "z0OmBd1.jpg");
-loadSprite("top-door", "U9nre4n.png");
-loadSprite("fire-pot", "I7xSp7w.png");
-loadSprite("left-door", "okdJNls.png");
-loadSprite("lanterns", "wiSiY09.png");
-loadSprite("slicer", "c6JFi5Z.png");
-loadSprite("skeletor", "Ei1VnX8.png");
-loadSprite("kaboom", "o9WizfI.png");
-loadSprite("stairs", "VghkL08.png");
-loadSprite("bg", "u4DVsx6.png");
-
+loadSprites();
 scene("game", ({ level, score }) => {
+  add([sprite("bg")]);
   
-  add([sprite("bg")]);  
-  const maps = [
-    [
-      "ycc)cc9ccw",
-      "a        b",
-      "a      * b",
-      "a    (   b",
-      "%        b",
-      "a    (   b",
-      "a   *    b",
-      "a        b",
-      "xdd)dd)ddz",
-    ],
-    [
-      "yccccccccw",
-      "a        b",
-      ")        )",
-      "a        b",
-      "a        b",
-      "a    $   b",
-      ")   s    )",
-      "a        b",
-      "xddddddddz",
-    ],
-  ];
 
   const levelCfg = {
     tileWidth: 48,
     tileHeight: 48,
     tiles: {
-      "a": () => [sprite("left-wall"), area(), body({ isStatic: true }), "wall"],
-      "b": () => [sprite("right-wall"), area(), body({ isStatic: true }), "wall"],
-      "c": () => [sprite("top-wall"),area(), body({ isStatic: true }), "wall"],
-      "d": () => [sprite("bottom-wall"), area(),body({ isStatic: true }), "wall"],
-      "w": () => [sprite("top-right-wall"),area(), body({ isStatic: true }), "wall"],
-      "x": () => [sprite("bottom-left-wall"),area(), body({ isStatic: true }), "wall"],
-      "y": () => [sprite("top-left-wall"), area(),body({ isStatic: true }), "wall"],
-      "z": () => [sprite("bottom-right-wall"),area(), body({ isStatic: true }), "wall"],
-      "%": () => [sprite("left-door"), area(),body({ isStatic: true }), "door"],
-      "9": () => [sprite("top-door"),area(), "next-level"],
-      "$": () => [sprite("stairs"),area(), "next-level"],
-      "*": () => [sprite("slicer"),area(), "slicer", { dir: -1 }, "dangerous"],
-      "s": () => [
+      a: () => [sprite("left-wall"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
+      b: () => [sprite("right-wall"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
+      c: () => [sprite("top-wall"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
+      d: () => [
+        sprite("bottom-wall"),
+        area(),
+        body({ isStatic: true }),
+        "wall",
+      ],
+      w: () => [
+        sprite("top-right-wall"),
+        area(),
+        body({ isStatic: true }),
+        "wall",
+      ],
+      x: () => [
+        sprite("bottom-left-wall"),
+        area(),
+        body({ isStatic: true }),
+        "wall",
+      ],
+      y: () => [
+        sprite("top-left-wall"),
+        area(),
+        body({ isStatic: true }),
+        "wall",
+      ],
+      z: () => [
+        sprite("bottom-right-wall"),
+        area(),
+        body({ isStatic: true }),
+        "wall",
+      ],
+      "%": () => [
+        sprite("left-door"),
+        area(),
+        body({ isStatic: true }),
+        "door",
+      ],
+      9: () => [sprite("top-door"), area(), "next-level"],
+      $: () => [sprite("stairs"), area(), "next-level"],
+      "-": () => [sprite("slicer"), area({ scale: 0.9 }), "slicer",{ dir: -1 }, "dangerous"],
+      s: () => [
         sprite("skeletor"),
         area(),
         "dangerous",
         "skeletor",
         { dir: -1, timer: 0 },
       ],
-      ")": () => [sprite("lanterns"),area(), body({ isStatic: true }), "wall"],
-      "(": () => [sprite("fire-pot"),area(), body({ isStatic: true }), "wall"],
-    }
+      ")": () => [sprite("lanterns"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
+      "(": () => [sprite("fire-pot"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
+    },
   };
 
-  addLevel(maps[level], levelCfg)
-
-  
+  addLevel(maps[level], levelCfg);
 
   const scoreLabel = add([
     text("0"),
@@ -109,15 +93,36 @@ scene("game", ({ level, score }) => {
   add([text("level " + parseInt(level + 1)), pos(450, 485), scale(2)]);
 
   const player = add([
-    sprite("link-going-right"),
+    sprite("crisis-left"),
     pos(5, 190),
-    area(),          // has a collider
-    body(), 
+    area({scale: 0.9}), // has a collider
+    body({ isStatic: false }),
+    "player",
+    "friendly",
     {
       // right by default
       dir: vec2(1, 0),
     },
   ]);
+  // camera follows player
+  
+  const enemy = add([
+    pos(80, 100),
+    sprite("skeletor"),
+    area({scale: 0.9}), // has a collider
+    body({ isStatic: false }),
+    state("idle", ["idle", "attack", "move"]),
+    
+    // follow(player, 100)
+])
+player.onUpdate(() => {
+  camPos(player.pos);
+  // enemy.move(SKELETOR_SPEED, player.pos.x);
+  enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
+  console.log(player.pos.x)
+  console.log(player.pos.y)
+})
+
 
   player.onCollide("next-level", () => {
     go("game", {
@@ -165,7 +170,7 @@ scene("game", ({ level, score }) => {
     destroy(d);
   });
 
-  onCollideUpdate("kaboom", "skeletor", (k, s) => {
+  onCollide("kaboom", "skeletor", (k, s) => {
     shake(4);
     wait(1, () => {
       destroy(k);
@@ -184,12 +189,13 @@ scene("game", ({ level, score }) => {
   });
 
   onUpdate("skeletor", (s) => {
-    s.move(0, s.dir * SKELETOR_SPEED);
-    s.timer -= dt();
-    if (s.timer <= 0) {
-      s.dir = -s.dir;
-      s.timer = rand(5);
-    }
+    s.move(0, s.dir * SKELETOR_SPEED); 
+    // follow(player,  SKELETOR_SPEED);
+    // s.timer -= dt();
+    // if (s.timer <= 0) {
+    //   s.dir = -s.dir;
+    //   s.timer = rand(5);
+    // }
   });
 
   onCollide("skeletor", "wall", (s) => {
