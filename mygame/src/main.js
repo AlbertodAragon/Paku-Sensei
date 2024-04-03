@@ -1,6 +1,6 @@
 import kaboom from "kaboom";
 import { loadSprites } from "./hooks/loadSprites.js";
-import { maps } from "./maps/maps.js";
+import { maps, levelCfg } from "./maps/maps.js";
 
 import {
   MOVE_SPEED,
@@ -19,65 +19,8 @@ kaboom({
 loadSprites();
 scene("game", ({ level, score }) => {
   add([sprite("bg")]);
-  
 
-  const levelCfg = {
-    tileWidth: 48,
-    tileHeight: 48,
-    tiles: {
-      a: () => [sprite("left-wall"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
-      b: () => [sprite("right-wall"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
-      c: () => [sprite("top-wall"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
-      d: () => [
-        sprite("bottom-wall"),
-        area(),
-        body({ isStatic: true }),
-        "wall",
-      ],
-      w: () => [
-        sprite("top-right-wall"),
-        area(),
-        body({ isStatic: true }),
-        "wall",
-      ],
-      x: () => [
-        sprite("bottom-left-wall"),
-        area(),
-        body({ isStatic: true }),
-        "wall",
-      ],
-      y: () => [
-        sprite("top-left-wall"),
-        area(),
-        body({ isStatic: true }),
-        "wall",
-      ],
-      z: () => [
-        sprite("bottom-right-wall"),
-        area(),
-        body({ isStatic: true }),
-        "wall",
-      ],
-      "%": () => [
-        sprite("left-door"),
-        area(),
-        body({ isStatic: true }),
-        "door",
-      ],
-      9: () => [sprite("top-door"), area(), "next-level"],
-      $: () => [sprite("stairs"), area(), "next-level"],
-      "-": () => [sprite("slicer"), area({ scale: 0.9 }), "slicer",{ dir: -1 }, "dangerous"],
-      s: () => [
-        sprite("skeletor"),
-        area(),
-        "dangerous",
-        "skeletor",
-        { dir: -1, timer: 0 },
-      ],
-      ")": () => [sprite("lanterns"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
-      "(": () => [sprite("fire-pot"), area({ scale: 0.9 }), body({ isStatic: true }), "wall"],
-    },
-  };
+ 
 
   addLevel(maps[level], levelCfg);
 
@@ -95,7 +38,8 @@ scene("game", ({ level, score }) => {
   const player = add([
     sprite("crisis-left"),
     pos(5, 190),
-    area({scale: 0.9}), // has a collider
+    health(3),
+    area({ scale: 0.9 }), // has a collider
     body({ isStatic: false }),
     "player",
     "friendly",
@@ -103,26 +47,33 @@ scene("game", ({ level, score }) => {
       // right by default
       dir: vec2(1, 0),
     },
+    
   ]);
-  // camera follows player
-  
+
+  console.log(player);
+
+  const playerBar = add([
+    text("health " + player.hp()),
+    { value: player.hp() },
+    pos(100, 550),
+    scale(1),
+  ]);
+// player.onHurt(playerBar.text = playerBar.value);
   const enemy = add([
     pos(80, 100),
     sprite("skeletor"),
-    area({scale: 0.9}), // has a collider
+    area({ scale: 0.9 }), // has a collider
     body({ isStatic: false }),
+    "dangerous",
     state("idle", ["idle", "attack", "move"]),
-    
-    // follow(player, 100)
-])
-player.onUpdate(() => {
-  camPos(player.pos);
-  // enemy.move(SKELETOR_SPEED, player.pos.x);
-  enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
-  console.log(player.pos.x)
-  console.log(player.pos.y)
-})
 
+    // follow(player, 100)
+  ]);
+  player.onUpdate(() => {
+    camPos(player.pos);
+    playerBar.text = 'health ' + player.hp();
+    enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
+  });
 
   player.onCollide("next-level", () => {
     go("game", {
@@ -130,7 +81,8 @@ player.onUpdate(() => {
       score: scoreLabel.value,
     });
   });
-
+ 
+  
   onKeyDown("left", () => {
     player.use(sprite("link-going-left"));
     player.move(-MOVE_SPEED, 0);
@@ -188,21 +140,12 @@ player.onUpdate(() => {
     s.dir = -s.dir;
   });
 
-  onUpdate("skeletor", (s) => {
-    s.move(0, s.dir * SKELETOR_SPEED); 
-    // follow(player,  SKELETOR_SPEED);
-    // s.timer -= dt();
-    // if (s.timer <= 0) {
-    //   s.dir = -s.dir;
-    //   s.timer = rand(5);
-    // }
-  });
-
-  onCollide("skeletor", "wall", (s) => {
-    s.dir = -s.dir;
-  });
-
   player.onCollide("dangerous", () => {
+    player.hurt(1);
+  });
+
+  player.on("death", () => {
+    destroy(player);
     go("lose", { score: scoreLabel.value });
   });
 });
