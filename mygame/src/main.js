@@ -3,9 +3,9 @@ import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero } from "./objects/player.js";
 import { enemies } from "./objects/enemy.js";
+ import {movement} from "./hooks/keys.js";
 
 import {
-  MOVE_SPEED,
   SLICER_SPEED,
   SKELETOR_SPEED,
 } from "../src/contants/constants";
@@ -44,36 +44,12 @@ k.scene("game", ({ level, score }) => {
     enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
   });
 
-  player.onCollide("next-level", () => {
-    go("game", {
-      level: (level + 1) % maps.length,
-      score: scoreLabel.value,
-    });
-  });
-
-  onKeyDown("left", () => {
-    player.use(sprite("link-going-left"));
-    player.move(-MOVE_SPEED, 0);
-    player.dir = vec2(-1, 0);
-  });
-
-  onKeyDown("right", () => {
-    player.use(sprite("link-going-right"));
-    player.move(MOVE_SPEED, 0);
-    player.dir = vec2(1, 0);
-  });
-
-  onKeyDown("up", () => {
-    player.use(sprite("link-going-up"));
-    player.move(0, -MOVE_SPEED);
-    player.dir = vec2(0, -1);
-  });
-
-  onKeyDown("down", () => {
-    player.use(sprite("link-going-down"));
-    player.move(0, MOVE_SPEED);
-    player.dir = vec2(0, 1);
-  });
+  // player.onCollide("next-level", () => {
+  //   go("game", {
+  //     level: (level + 1) % maps.length,
+  //     score: scoreLabel.value,
+  //   });
+  // });
 
   function spawnKaboom(p) {
     const obj = add([sprite("kaboom"), area(), pos(p), "kaboom"]);
@@ -86,19 +62,9 @@ k.scene("game", ({ level, score }) => {
     spawnKaboom(player.pos.add(player.dir.scale(48)));
   });
 
-  player.onCollide("door", (d) => {
-    destroy(d);
-  });
-
-  onCollide("kaboom", "skeletor", (k, s) => {
-    shake(4);
-    wait(1, () => {
-      destroy(k);
-    });
-    destroy(s);
-    scoreLabel.value++;
-    scoreLabel.text = scoreLabel.value;
-  });
+  // player.onCollide("door", (d) => {
+  //   destroy(d);
+  // });
 
   onUpdate("slicer", (s) => {
     s.move(s.dir * SLICER_SPEED, 0);
@@ -113,6 +79,7 @@ k.scene("game", ({ level, score }) => {
   });
 
   enemy.onCollide("kaboom", () => {
+    shake(4);
     enemy.hurt(1);
   });
 
@@ -124,6 +91,8 @@ k.scene("game", ({ level, score }) => {
     destroy(player);
     go("lose", { score: scoreLabel.value });
   });
+
+  movement(player);
 });
 
 scene("lose", ({ score }) => {
