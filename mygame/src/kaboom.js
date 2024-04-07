@@ -6,6 +6,8 @@ export const k = kaboom({
   scale: 1,
   debug: true,
   clearColor: [0, 0, 0, 1],
+  background: [ 0, 0, 0 ]
+,
 });
 
 export default k;
