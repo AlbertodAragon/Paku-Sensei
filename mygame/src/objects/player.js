@@ -1,6 +1,6 @@
 export const playerHero = [
   sprite("crisis-left"),
-  pos(5, 190),
+  pos(300, 220),
   health(3),
   area({ scale: 0.9 }), // has a collider
   body({ isStatic: false }),

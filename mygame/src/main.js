@@ -6,8 +6,7 @@ import { enemies } from "./objects/enemy.js";
  import {movement} from "./hooks/keys.js";
 
 import {
-  SLICER_SPEED,
-  SKELETOR_SPEED,
+  ENEMY_SPEED,
 } from "../src/contants/constants";
 
 loadSprites();
@@ -25,8 +24,6 @@ k.scene("game", ({ level, score }) => {
     scale(2),
   ]);
 
-  add([text("level " + parseInt(level + 1)), pos(450, 485), scale(2)]);
-
   const player = add(playerHero);
   const enemy = add(enemies);
 
@@ -41,7 +38,7 @@ k.scene("game", ({ level, score }) => {
     camPos(player.pos);
     playerBar.text = "health " + player.hp();
 
-    enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
+    enemy.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
   });
 
   // player.onCollide("next-level", () => {
@@ -66,13 +63,13 @@ k.scene("game", ({ level, score }) => {
   //   destroy(d);
   // });
 
-  onUpdate("slicer", (s) => {
-    s.move(s.dir * SLICER_SPEED, 0);
-  });
+  // onUpdate("slicer", (s) => {
+  //   s.move(s.dir * SLICER_SPEED, 0);
+  // });
 
-  onCollide("slicer", "wall", (s) => {
-    s.dir = -s.dir;
-  });
+  // onCollide("slicer", "wall", (s) => {
+  //   s.dir = -s.dir;
+  // });
 
   player.onCollide("dangerous", () => {
     player.hurt(1);
@@ -91,6 +88,8 @@ k.scene("game", ({ level, score }) => {
     destroy(player);
     go("lose", { score: scoreLabel.value });
   });
+
+  add([text("level " + parseInt(level + 1)), pos(450, 485), scale(2)]);
 
   movement(player);
 });
