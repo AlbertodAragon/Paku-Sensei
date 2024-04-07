@@ -29,7 +29,6 @@ k.scene("game", ({ level, score }) => {
 
   const player = add(playerHero);
   const enemy = add(enemies);
-  console.log(player);
 
   const playerBar = add([
     text("health " + player.hp()),
@@ -41,6 +40,7 @@ k.scene("game", ({ level, score }) => {
   player.onUpdate(() => {
     camPos(player.pos);
     playerBar.text = "health " + player.hp();
+
     enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
   });
 
