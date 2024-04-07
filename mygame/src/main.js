@@ -1,6 +1,8 @@
-import kaboom from "kaboom";
+import k from "./kaboom";
 import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
+import { playerHero } from "./objects/player.js";
+import { enemies } from "./objects/enemy.js";
 
 import {
   MOVE_SPEED,
@@ -8,19 +10,9 @@ import {
   SKELETOR_SPEED,
 } from "../src/contants/constants";
 
-kaboom({
-  global: true,
-  fullscreen: true,
-  scale: 1,
-  debug: true,
-  clearColor: [0, 0, 0, 1],
-});
-
 loadSprites();
-scene("game", ({ level, score }) => {
+k.scene("game", ({ level, score }) => {
   add([sprite("bg")]);
-
- 
 
   addLevel(maps[level], levelCfg);
 
@@ -35,21 +27,8 @@ scene("game", ({ level, score }) => {
 
   add([text("level " + parseInt(level + 1)), pos(450, 485), scale(2)]);
 
-  const player = add([
-    sprite("crisis-left"),
-    pos(5, 190),
-    health(3),
-    area({ scale: 0.9 }), // has a collider
-    body({ isStatic: false }),
-    "player",
-    "friendly",
-    {
-      // right by default
-      dir: vec2(1, 0),
-    },
-    
-  ]);
-
+  const player = add(playerHero);
+  const enemy = add(enemies);
   console.log(player);
 
   const playerBar = add([
@@ -58,20 +37,10 @@ scene("game", ({ level, score }) => {
     pos(100, 550),
     scale(1),
   ]);
-// player.onHurt(playerBar.text = playerBar.value);
-  const enemy = add([
-    pos(80, 100),
-    sprite("skeletor"),
-    area({ scale: 0.9 }), // has a collider
-    body({ isStatic: false }),
-    "dangerous",
-    state("idle", ["idle", "attack", "move"]),
 
-    // follow(player, 100)
-  ]);
   player.onUpdate(() => {
     camPos(player.pos);
-    playerBar.text = 'health ' + player.hp();
+    playerBar.text = "health " + player.hp();
     enemy.moveTo(player.pos.x, player.pos.y, SKELETOR_SPEED);
   });
 
@@ -81,8 +50,7 @@ scene("game", ({ level, score }) => {
       score: scoreLabel.value,
     });
   });
- 
-  
+
   onKeyDown("left", () => {
     player.use(sprite("link-going-left"));
     player.move(-MOVE_SPEED, 0);
@@ -142,6 +110,14 @@ scene("game", ({ level, score }) => {
 
   player.onCollide("dangerous", () => {
     player.hurt(1);
+  });
+
+  enemy.onCollide("kaboom", () => {
+    enemy.hurt(1);
+  });
+
+  enemy.on("death", () => {
+    destroy(enemy);
   });
 
   player.on("death", () => {
