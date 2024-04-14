@@ -1,4 +1,3 @@
-
 export const enemies = add([
   pos(80, 100),
   sprite("skeletor"),
