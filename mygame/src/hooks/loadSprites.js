@@ -21,5 +21,20 @@ export const loadSprites = () => {
   loadSprite("kaboom", "o9WizfI.png");
   loadSprite("stairs", "VghkL08.png");
   loadSprite("bg", "u4DVsx6.png");
-  loadSprite("crisis-left", "taucrisis.gif");
+  loadSprite("bg2", "try_bg.png");
+  loadSprite("tau-right", "tau-right.png");
+  loadSprite("tau-left", "tau-left.png");
+  loadSpriteAtlas("hero_sprites.png", {
+    hero: {
+      x: 0,
+      y: 0,
+      width: 470,
+      height: 58,
+      sliceX: 9,
+      anims: {
+        idle: 7,
+        walk: { from: 1, to: 7, loop: true },
+      },
+    },
+  });
 };

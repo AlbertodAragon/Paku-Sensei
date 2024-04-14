@@ -3,21 +3,19 @@ import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero } from "./objects/player.js";
 import { enemies } from "./objects/enemy.js";
- import {movement} from "./hooks/keys.js";
+import { movement } from "./hooks/keys.js";
 
-import {
-  ENEMY_SPEED,
-} from "../src/contants/constants";
+import { ENEMY_SPEED, HERO_SPEED } from "../src/contants/constants";
 
 loadSprites();
 k.scene("game", ({ level, score }) => {
-  add([sprite("bg")]);
+  add([sprite("bg2")]);
 
   addLevel(maps[level], levelCfg);
 
   const scoreLabel = add([
     text("0"),
-    pos(400, 450),
+    // pos(400, 450),
     {
       value: score,
     },
@@ -25,6 +23,24 @@ k.scene("game", ({ level, score }) => {
   ]);
 
   const player = add(playerHero);
+
+  player.play("idle");
+
+  //   player.action( () =>{
+
+  //   const left = onKeyDown("left");
+  //   const right = onKeyDown("right");
+  //   const up = onKeyDown("up");
+  //   const down = onKeyDown("down");
+
+  //   if (left)
+  //   {
+  //     player.play('walk');
+  //     player.flipX(true);
+  //     player.pos.x -= HERO_SPEED
+  //   }
+  // });
+
   const enemy = add(enemies);
 
   const playerBar = add([
@@ -38,7 +54,7 @@ k.scene("game", ({ level, score }) => {
     camPos(player.pos);
     playerBar.text = "health " + player.hp();
 
-    enemy.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
+    // enemy.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
   });
 
   // player.onCollide("next-level", () => {

@@ -1,13 +1,15 @@
 export const playerHero = [
-  sprite("crisis-left"),
-  pos(300, 220),
+  sprite("hero"),
+  pos(450, 350),
   health(3),
   area({ scale: 0.9 }), // has a collider
   body({ isStatic: false }),
   "player",
   "friendly",
-  {
-    // right by default
-    dir: vec2(1, 0),
-  },
+  "hero",
+  // {
+  //   // right by default
+  //   dir: vec2(1, 0),
+  // },
+  scale(1),
 ];
