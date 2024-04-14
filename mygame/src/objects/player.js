@@ -12,4 +12,5 @@ export const playerHero = [
   //   dir: vec2(1, 0),
   // },
   scale(1),
+  // flipX(false),
 ];
