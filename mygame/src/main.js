@@ -43,6 +43,8 @@ k.scene("game", ({ level, score }) => {
 
   const enemy = add(enemies);
 
+ 
+
   const playerBar = add([
     text("health " + player.hp()),
     { value: player.hp() },
@@ -72,7 +74,15 @@ k.scene("game", ({ level, score }) => {
   }
 
   onKeyPress("space", () => {
-    spawnKaboom(player.pos.add(player.dir.scale(48)));
+    // spawnKaboom(player.pos.add(player.dir.scale(48)));
+    const projectile = add([
+      sprite("slicer"),
+      pos(player.pos),
+      area(),
+      move(enemy.pos.angle(player.pos), 800),
+      offscreen({ destroy: true }),
+      scale(0.5)
+  ])
   });
 
   // player.onCollide("door", (d) => {
