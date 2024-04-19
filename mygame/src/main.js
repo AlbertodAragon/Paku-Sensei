@@ -3,9 +3,10 @@ import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero } from "./objects/player.js";
 import { enemies } from "./objects/enemy.js";
+import { projectile } from "./objects/projectile.js";
 import { movement } from "./hooks/keys.js";
 
-import { ENEMY_SPEED, HERO_SPEED } from "../src/contants/constants";
+import { ENEMY_SPEED, HERO_SPEED, SPEED_BULLET } from "../src/contants/constants";
 
 loadSprites();
 k.scene("game", ({ level, score }) => {
@@ -75,14 +76,7 @@ k.scene("game", ({ level, score }) => {
 
   onKeyPress("space", () => {
     // spawnKaboom(player.pos.add(player.dir.scale(48)));
-    const projectile = add([
-      sprite("slicer"),
-      pos(player.pos),
-      area(),
-      move(enemy.pos.angle(player.pos), 800),
-      offscreen({ destroy: true }),
-      scale(0.5)
-  ])
+    projectile(player, enemy, SPEED_BULLET)
   });
 
   // player.onCollide("door", (d) => {
