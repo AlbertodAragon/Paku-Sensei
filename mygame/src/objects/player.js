@@ -7,10 +7,10 @@ export const playerHero = [
   "player",
   "friendly",
   "hero",
-  // {
-  //   // right by default
-  //   dir: vec2(1, 0),
-  // },
+  {
+    // right by default
+    dir: vec2(-0.5, 0),
+  },
   scale(1),
   // flipX(false),
 ];

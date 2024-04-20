@@ -2,11 +2,15 @@ import k from "./kaboom";
 import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero } from "./objects/player.js";
-import { enemies } from "./objects/enemy.js";
-import { projectile } from "./objects/projectile.js";
+import { spawnDemons } from "./objects/enemy.js";
+import { projectile, melee } from "./objects/weapons.js";
 import { movement } from "./hooks/keys.js";
 
-import { ENEMY_SPEED, HERO_SPEED, SPEED_BULLET } from "../src/contants/constants";
+import {
+  ENEMY_SPEED,
+  HERO_SPEED,
+  SPEED_BULLET,
+} from "../src/contants/constants";
 
 loadSprites();
 k.scene("game", ({ level, score }) => {
@@ -24,28 +28,13 @@ k.scene("game", ({ level, score }) => {
   ]);
 
   const player = add(playerHero);
-
   player.play("idle");
 
-  //   player.action( () =>{
+  // const enemy = add(demon);
 
-  //   const left = onKeyDown("left");
-  //   const right = onKeyDown("right");
-  //   const up = onKeyDown("up");
-  //   const down = onKeyDown("down");
+  spawnDemons();
 
-  //   if (left)
-  //   {
-  //     player.play('walk');
-  //     player.flipX(true);
-  //     player.pos.x -= HERO_SPEED
-  //   }
-  // });
-
-  const enemy = add(enemies);
-
- 
-
+  // spawnDemons();
   const playerBar = add([
     text("health " + player.hp()),
     { value: player.hp() },
@@ -67,6 +56,11 @@ k.scene("game", ({ level, score }) => {
   //   });
   // });
 
+  // enemy &&
+  //   setInterval(() => {
+  //     projectile(projectile(player, enemy, SPEED_BULLET));
+  //   }, 1000);
+
   function spawnKaboom(p) {
     const obj = add([sprite("kaboom"), area(), pos(p), "kaboom"]);
     wait(0.2, () => {
@@ -75,8 +69,8 @@ k.scene("game", ({ level, score }) => {
   }
 
   onKeyPress("space", () => {
-    // spawnKaboom(player.pos.add(player.dir.scale(48)));
-    projectile(player, enemy, SPEED_BULLET)
+    // console.log(getData());
+    melee(player.pos.add(player.dir.scale(48)));
   });
 
   // player.onCollide("door", (d) => {
@@ -95,14 +89,14 @@ k.scene("game", ({ level, score }) => {
     player.hurt(1);
   });
 
-  enemy.onCollide("kaboom", () => {
-    shake(4);
-    enemy.hurt(1);
-  });
+  // enemy.onCollide("kaboom", () => {
+  //   shake(4);
+  //   enemy.hurt(1);
+  // });
 
-  enemy.on("death", () => {
-    destroy(enemy);
-  });
+  // enemy.on("death", () => {
+  //   destroy(enemy);
+  // });
 
   player.on("death", () => {
     destroy(player);

@@ -31,7 +31,7 @@ export const movement = (player) => {
       player.play("walk");
     }
     player.move(0, -HERO_SPEED);
-    console.log(player);
+    // console.log(player);
     player.dir = vec2(0, -1);
   });
 
