@@ -22,7 +22,7 @@ export const projectile = (player, enemy, speed) => {
     destroy(bullet);
   });
 };
-export const melee = (position) => {
+export const meleeAttack = (position) => {
   const kaboom = add([sprite("kaboom"), area(9), pos(position), "kaboom"]);
 
   kaboom.onCollide("dangerous", (enemy) => {
