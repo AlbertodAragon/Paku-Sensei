@@ -1,12 +1,10 @@
 import k from "./kaboom";
 import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
-import { playerHero } from "./objects/player.js";
-import { spawnDemons } from "./objects/enemy.js";
+import { playerHero, playerLogic } from "./objects/player.js";
+import { spawnDemons, enemyLogic } from "./objects/enemy.js";
 import { projectile, meleeAttack } from "./objects/weapons.js";
 import { movement } from "./hooks/keys.js";
-import { playerLogic } from "./hooks/playerLogic.js";
-
 import {
   ENEMY_SPEED,
   HERO_SPEED,
@@ -34,6 +32,7 @@ k.scene("game", ({ level, score }) => {
   // const enemy = add(demon);
 
   spawnDemons();
+  enemyLogic(player);
 
   // enemy &&
   //   setInterval(() => {

@@ -1,6 +1,6 @@
-const removeMelee = (kaboom) => {
-  wait(0.2, () => {
-    destroy(kaboom);
+const removeAttack = (attack) => {
+  wait(0.05, () => {
+    destroy(attack);
   });
 };
 
@@ -14,14 +14,16 @@ export const projectile = (player, enemy, speed) => {
     scale(0.5),
   ]);
 
-  bullet.onCollide("dangerous", () => {
+  bullet.onCollide("dangerous", (enemy) => {
     enemy.hurt(1);
+    enemy.hp() === 0 && destroy(enemy);
   });
 
   bullet.onCollide("wall", () => {
-    destroy(bullet);
+    removeAttack(bullet);
   });
 };
+
 export const meleeAttack = (position) => {
   const kaboom = add([sprite("kaboom"), area(9), pos(position), "kaboom"]);
 
@@ -30,5 +32,5 @@ export const meleeAttack = (position) => {
     enemy.hp() === 0 && destroy(enemy);
   });
 
-  removeMelee(kaboom);
+  removeAttack(kaboom);
 };
