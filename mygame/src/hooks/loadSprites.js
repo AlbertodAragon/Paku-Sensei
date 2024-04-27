@@ -33,7 +33,7 @@ export const loadSprites = () => {
       sliceX: 9,
       anims: {
         idle: 7,
-        walk: { from: 2, to: 7, loop: true },
+        walk: { from: 0, to: 7, loop: true },
       },
     },
   });
