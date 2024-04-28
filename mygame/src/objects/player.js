@@ -1,3 +1,11 @@
+import { projectile } from "./weapons";
+import {
+  ENEMY_SPEED,
+  HERO_SPEED,
+  SPEED_BULLET,
+  RATIO_BULLET,
+} from "../contants/constants";
+
 export const playerHero = [
   sprite("hero"),
   pos(450, 350),
@@ -35,6 +43,10 @@ export const playerLogic = (player, scoreLabel) => {
     pos(100, 550),
     scale(1),
   ]);
+  player &&
+    setInterval(() => {
+      projectile(player, SPEED_BULLET);
+    }, RATIO_BULLET);
 
   player.onUpdate(() => {
     camPos(player.pos);

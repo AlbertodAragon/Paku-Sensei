@@ -5,7 +5,7 @@ export const movement = (player) => {
   onKeyRelease(() => {
     player.play("idle");
   });
-  onKeyDown("left", () => {
+  onKeyDown("a", () => {
     if (player.curAnim() !== "walk") {
       player.play("walk");
     }
@@ -16,7 +16,7 @@ export const movement = (player) => {
     player.dir = vec2(-1, 0);
   });
 
-  onKeyDown("right", () => {
+  onKeyDown("d", () => {
     if (player.curAnim() !== "walk") {
       player.play("walk");
     }
@@ -25,7 +25,7 @@ export const movement = (player) => {
     player.dir = vec2(1, 0);
   });
 
-  onKeyDown("up", () => {
+  onKeyDown("w", () => {
     // player.use(sprite("link-going-up"));
     if (player.curAnim() !== "walk") {
       player.play("walk");
@@ -35,7 +35,7 @@ export const movement = (player) => {
     player.dir = vec2(0, -1);
   });
 
-  onKeyDown("down", () => {
+  onKeyDown("s", () => {
     if (player.curAnim() !== "walk") {
       player.play("walk");
     }
