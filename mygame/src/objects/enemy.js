@@ -11,7 +11,9 @@ const getEnemies = (player) => {
   const allEnemies = get("dangerous");
 
   const allEnemiesPosition = allEnemies.map(({ pos }) => pos);
+  console.log("player", player.pos);
   console.log("enemyPos", allEnemiesPosition);
+  console.log("das", vec2(player.pos.x, player.pos.y));
 
   getCloserEnemy(allEnemiesPosition, player.pos);
 };
@@ -47,7 +49,7 @@ export const enemyLogic = (player) => {
     getEnemies(player);
   });
   onUpdate("dangerous", (skeletor) => {
-    // skeletor.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
+    skeletor.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
     // projectile(player, skeletor, SPEED_BULLET);
   });
 };
