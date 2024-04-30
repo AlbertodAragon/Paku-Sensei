@@ -1,24 +1,15 @@
-import { ENEMY_SPEED, HERO_SPEED, SPEED_BULLET } from "../contants/constants";
+import {
+  ENEMY_SPEED,
+  HERO_SPEED,
+  SPEED_BULLET,
+  RATIO_BULLET,
+} from "../contants/constants";
 import { projectile } from "./weapons";
+import { getCloserEnemy } from "../hooks/closestEnemy";
 
 let i = 0;
 
-const getCloserEnemy = (allEnemiesPosition, playerPos) => {
-  console.log(playerPos);
-};
-
-const getEnemies = (player) => {
-  const allEnemies = get("dangerous");
-
-  const allEnemiesPosition = allEnemies.map(({ pos }) => pos);
-  console.log("player", player.pos);
-  console.log("enemyPos", allEnemiesPosition);
-  console.log("das", vec2(player.pos.x, player.pos.y));
-
-  getCloserEnemy(allEnemiesPosition, player.pos);
-};
-
-export const spawnDemons = () => {
+export const spawnDemons = (player) => {
   add([
     pos(
       Math.trunc(Math.random() * (700 - 80) + 80),
@@ -35,21 +26,11 @@ export const spawnDemons = () => {
   while (i < 4) {
     wait(rand(0), spawnDemons);
     i++;
-    // if (i === 4) {
-    //   console.log("i", i);
-    //   wait(1, () => {
-    //     getEnemies();
-    //   });
-    // }
   }
 };
 
 export const enemyLogic = (player) => {
-  wait(1, () => {
-    getEnemies(player);
-  });
   onUpdate("dangerous", (skeletor) => {
     skeletor.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
-    // projectile(player, skeletor, SPEED_BULLET);
   });
 };

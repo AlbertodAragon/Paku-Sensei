@@ -24,6 +24,21 @@ export const loadSprites = () => {
   loadSprite("bg2", "try_bg.png");
   loadSprite("tau-right", "tau-right.png");
   loadSprite("tau-left", "tau-left.png");
+
+  loadSpriteAtlas("plasma_bullet.png", {
+    plasma: {
+      x: 0,
+      y: 0,
+      width: 37,
+      height: 9,
+      sliceX: 4,
+      anims: {
+        idle: 3,
+        shoot: { from: 0, to: 3, loop: true },
+      },
+    },
+  });
+
   loadSpriteAtlas("hero_sprites.png", {
     hero: {
       x: 0,
