@@ -4,26 +4,22 @@ const removeAttack = (attack) => {
   });
 };
 
-export const projectile = (player, speed) => {
-  var rect = mousePos();
-  var x = rect.x - player.pos.x; //x position within the element.
-  var y = rect.y - player.pos.y; //y position within the element.
-  // const positionFinal = { x, y };
-
-  // console.log("rect", rect);
-  console.log("positionFinal", positionFinal);
-
+export const projectile = (playerPos, closestEnemy, speed) => {
   const bullet = add([
-    sprite("slicer"),
-    pos(player.pos),
-    area(),
-    move(vec2(x, y), speed),
+    sprite("plasma"),
+    pos(playerPos),
+    area(1),
+    move(closestEnemy.angle(playerPos), speed),
     offscreen({ destroy: true }),
-    scale(0.5),
+    scale(1),
     "bullet",
+    "plasma",
+    state("idle", ["shoot"]),
   ]);
+  bullet.play("idle");
 
   bullet.onCollide("dangerous", (enemy) => {
+    removeAttack(bullet);
     enemy.hurt(1);
     enemy.hp() === 0 && destroy(enemy);
   });

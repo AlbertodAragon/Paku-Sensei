@@ -3,12 +3,13 @@ import { loadSprites } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero, playerLogic } from "./objects/player.js";
 import { spawnDemons, enemyLogic } from "./objects/enemy.js";
-import { projectile, meleeAttack } from "./objects/weapons.js";
 import { movement } from "./hooks/keys.js";
+import { getCloserEnemy } from "./hooks/closestEnemy";
 import {
   ENEMY_SPEED,
   HERO_SPEED,
   SPEED_BULLET,
+  RATIO_BULLET,
 } from "../src/contants/constants";
 
 loadSprites();
@@ -29,26 +30,14 @@ k.scene("game", ({ level, score }) => {
   const player = add(playerHero);
   movement(player);
   playerLogic(player, score);
-  // const enemy = add(demon);
 
-  spawnDemons();
+  spawnDemons(player);
   enemyLogic(player);
 
-  // enemy &&
-  //   setInterval(() => {
-  //     projectile(projectile(player, enemy, SPEED_BULLET));
-  //   }, 1000);
-
-  // onUpdate("dangerous", (skeletor) => {
-  //   setInterval(() => {
-  //     projectile(projectile(player, skeletor, SPEED_BULLET));
-  //   }, 1000);
-  // });
-
-  onKeyPress("space", () => {
-    // console.log(getData());
-    meleeAttack(player.pos.add(player.dir.scale(48)));
-  });
+  player.pos &&
+    setInterval(() => {
+      getCloserEnemy(player.pos);
+    }, RATIO_BULLET);
 
   // player.onCollide("door", (d) => {
   //   destroy(d);

@@ -30,12 +30,8 @@ export const playerLogic = (player, scoreLabel) => {
   player.onCollide("dangerous", () => {
     player.hurt(1);
     player.hp() === 0 && destroy(player);
+    // go("lose");
   });
-
-  // player.on("death", () => {
-  //   destroy(player);
-  //   go("lose", { score: scoreLabel.value });
-  // });
 
   const playerBar = add([
     text("health " + player.hp()),
@@ -43,15 +39,9 @@ export const playerLogic = (player, scoreLabel) => {
     pos(100, 550),
     scale(1),
   ]);
-  player &&
-    setInterval(() => {
-      projectile(player, SPEED_BULLET);
-    }, RATIO_BULLET);
 
   player.onUpdate(() => {
     camPos(player.pos);
     playerBar.text = "health " + player.hp();
-
-    // enemy.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
   });
 };
