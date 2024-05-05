@@ -36,8 +36,9 @@ export const playerLogic = (player, scoreLabel) => {
   const playerBar = add([
     text("health " + player.hp()),
     { value: player.hp() },
-    pos(100, 550),
+    pos(100, -50),
     scale(1),
+    color(BLACK),
   ]);
 
   player.onUpdate(() => {

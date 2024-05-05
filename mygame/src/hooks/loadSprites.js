@@ -1,9 +1,5 @@
 export const loadSprites = () => {
   loadRoot("/sprites/");
-  loadSprite("link-going-left", "1Xq9biB.png");
-  loadSprite("link-going-right", "yZIb8O2.png");
-  loadSprite("link-going-down", "r377FIM.png");
-  loadSprite("link-going-up", "UkV0we0.png");
   loadSprite("left-wall", "rfDoaa1.png");
   loadSprite("top-wall", "QA257Bj.png");
   loadSprite("bottom-wall", "vWJWmvb.png");
@@ -22,22 +18,11 @@ export const loadSprites = () => {
   loadSprite("stairs", "VghkL08.png");
   loadSprite("bg", "u4DVsx6.png");
   loadSprite("bg2", "try_bg.png");
+  loadSprite("bg-tau", "background-tau.png");
   loadSprite("tau-right", "tau-right.png");
   loadSprite("tau-left", "tau-left.png");
-
-  loadSpriteAtlas("plasma_bullet.png", {
-    plasma: {
-      x: 0,
-      y: 0,
-      width: 37,
-      height: 9,
-      sliceX: 4,
-      anims: {
-        idle: 3,
-        shoot: { from: 0, to: 3, loop: true },
-      },
-    },
-  });
+  loadSprite("bullet", "bullet.png");
+  loadSprite("rock", "rock.png");
 
   loadSpriteAtlas("hero_sprites.png", {
     hero: {
@@ -52,4 +37,8 @@ export const loadSprites = () => {
       },
     },
   });
+};
+
+export const loadSounds = () => {
+  loadSound("shoot", "bullet-sound.mp3");
 };
