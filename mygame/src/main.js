@@ -1,10 +1,11 @@
 import k from "./kaboom";
-import { loadSprites } from "./hooks/loadSprites.js";
+import { loadSprites, loadSounds } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero, playerLogic } from "./objects/player.js";
 import { spawnDemons, enemyLogic } from "./objects/enemy.js";
 import { movement } from "./hooks/keys.js";
 import { getCloserEnemy } from "./hooks/closestEnemy";
+import { leveText } from "./hooks/texts.js";
 import {
   ENEMY_SPEED,
   HERO_SPEED,
@@ -13,8 +14,9 @@ import {
 } from "../src/contants/constants";
 
 loadSprites();
+loadSounds();
 k.scene("game", ({ level, score }) => {
-  add([sprite("bg2")]);
+  add([sprite("bg-tau")]);
 
   addLevel(maps[level], levelCfg);
 
@@ -39,37 +41,7 @@ k.scene("game", ({ level, score }) => {
       getCloserEnemy(player.pos);
     }, RATIO_BULLET);
 
-  // player.onCollide("door", (d) => {
-  //   destroy(d);
-  // });
-
-  // onUpdate("slicer", (s) => {
-  //   s.move(s.dir * SLICER_SPEED, 0);
-  // });
-
-  // onCollide("slicer", "wall", (s) => {
-  //   s.dir = -s.dir;
-  // });
-
-  // player.onCollide("dangerous", () => {
-  //   player.hurt(1);
-  // });
-
-  // enemy.onCollide("kaboom", () => {
-  //   shake(4);
-  //   enemy.hurt(1);
-  // });
-
-  // enemy.on("death", () => {
-  //   destroy(enemy);
-  // });
-
-  // player.on("death", () => {
-  //   destroy(player);
-  //   go("lose", { score: scoreLabel.value });
-  // });
-
-  add([text("level " + parseInt(level + 1)), pos(450, 485), scale(2)]);
+  leveText(level);
 });
 
 scene("lose", ({ score }) => {
