@@ -1,7 +1,7 @@
 import { HERO_SPEED } from "../contants/constants";
-import { meleeAttack } from "../objects/weapons.js";
+import { meleeAttack } from "../objects/attacks.js";
 
-export const movement = (player) => {
+export const movement = (player, weapon) => {
   onKeyRelease(() => {
     player.play("idle");
   });
@@ -11,6 +11,7 @@ export const movement = (player) => {
       player.play("walk");
     }
     player.flipX = false;
+    weapon.flipX = false;
     player.move(-HERO_SPEED, 0);
     player.dir = vec2(-1, 0);
   });
@@ -21,6 +22,7 @@ export const movement = (player) => {
     }
     player.move(HERO_SPEED, 0);
     player.flipX = true;
+    weapon.flipX = true;
     player.dir = vec2(1, 0);
   });
 
@@ -41,6 +43,6 @@ export const movement = (player) => {
   });
 
   onKeyPress("space", () => {
-    meleeAttack(player.pos.add(player.dir.scale(48)));
+    meleeAttack(player.pos.add(player.dir.scale(32)));
   });
 };

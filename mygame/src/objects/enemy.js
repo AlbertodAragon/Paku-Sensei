@@ -1,11 +1,4 @@
-import {
-  ENEMY_SPEED,
-  HERO_SPEED,
-  SPEED_BULLET,
-  RATIO_BULLET,
-} from "../contants/constants";
-import { projectile } from "./weapons";
-import { getCloserEnemy } from "../hooks/closestEnemy";
+import { ENEMY_SPEED } from "../contants/constants";
 
 let i = 0;
 
