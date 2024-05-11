@@ -3,6 +3,7 @@ import { loadSprites, loadSounds } from "./hooks/loadSprites.js";
 import { maps, levelCfg } from "./maps/maps.js";
 import { playerHero, playerLogic } from "./objects/player.js";
 import { spawnDemons, enemyLogic } from "./objects/enemy.js";
+import { weaponPlayer } from "./objects/weapon.js";
 import { movement } from "./hooks/keys.js";
 import { getCloserEnemy } from "./hooks/closestEnemy";
 import { leveText } from "./hooks/texts.js";
@@ -20,17 +21,9 @@ k.scene("game", ({ level, score }) => {
 
   addLevel(maps[level], levelCfg);
 
-  const scoreLabel = add([
-    text("0"),
-    // pos(400, 450),
-    {
-      value: score,
-    },
-    scale(2),
-  ]);
-
   const player = add(playerHero);
-  movement(player);
+  const weapon = player.add(weaponPlayer);
+  movement(player, weapon);
   playerLogic(player, score);
 
   spawnDemons(player);

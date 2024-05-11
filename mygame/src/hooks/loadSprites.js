@@ -21,8 +21,21 @@ export const loadSprites = () => {
   loadSprite("bg-tau", "background-tau.png");
   loadSprite("tau-right", "tau-right.png");
   loadSprite("tau-left", "tau-left.png");
-  loadSprite("bullet", "bullet.png");
+  loadSprite("rifle", "rifle.png");
   loadSprite("rock", "rock.png");
+
+  loadSpriteAtlas("bullet-animation.png", {
+    bullet: {
+      x: 0,
+      y: 0,
+      width: 94,
+      height: 15,
+      sliceX: 3,
+      anims: {
+        shoot: { from: 0, to: 2, loop: true },
+      },
+    },
+  });
 
   loadSpriteAtlas("hero_sprites.png", {
     hero: {
@@ -41,4 +54,5 @@ export const loadSprites = () => {
 
 export const loadSounds = () => {
   loadSound("shoot", "bullet-sound.mp3");
+  loadSound("sword", "sword-sound.mp3");
 };
