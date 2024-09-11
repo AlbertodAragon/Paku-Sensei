@@ -7,13 +7,13 @@ import {
 import { projectile } from "../objects/attacks";
 
 export const getCloserEnemy = (playerPos) => {
-  var allEnemies = get("dangerous");
+  const allEnemies = get("dangerous");
 
-  var allEnemiesPosition = allEnemies.map(({ pos }) => pos);
+  const allEnemiesPosition = allEnemies.map(({ pos }) => pos);
 
-  var goal = playerPos.x;
+  const goal = playerPos.x;
 
-  var closestEnemy = allEnemiesPosition?.reduce((prev, curr) => {
+  const closestEnemy = allEnemiesPosition?.reduce((prev, curr) => {
     return Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev;
   });
 
