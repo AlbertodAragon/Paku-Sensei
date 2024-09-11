@@ -8,7 +8,7 @@ export const spawnDemons = (player) => {
       Math.trunc(Math.random() * (700 - 80) + 80),
       Math.trunc(Math.random() * (700 - 100) + 100)
     ),
-    sprite("skeletor"),
+    sprite("orc"),
     area({ scale: 0.8 }),
     body({ isStatic: false }),
     health(1),
@@ -23,7 +23,8 @@ export const spawnDemons = (player) => {
 };
 
 export const enemyLogic = (player) => {
-  onUpdate("dangerous", (skeletor) => {
-    skeletor.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
+  onUpdate("dangerous", (orc) => {
+    orc.curAnim() !== "walk" && orc.play("walk");
+    orc.moveTo(player.pos.x, player.pos.y, ENEMY_SPEED);
   });
 };

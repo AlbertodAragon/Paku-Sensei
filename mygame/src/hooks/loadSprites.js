@@ -16,11 +16,9 @@ export const loadSprites = () => {
   loadSprite("skeletor", "Ei1VnX8.png");
   loadSprite("kaboom", "o9WizfI.png");
   loadSprite("stairs", "VghkL08.png");
-  loadSprite("bg", "u4DVsx6.png");
   loadSprite("bg2", "try_bg.png");
   loadSprite("bg-tau", "background-tau.png");
-  loadSprite("tau-right", "tau-right.png");
-  loadSprite("tau-left", "tau-left.png");
+
   loadSprite("rifle", "rifle.png");
   loadSprite("rock", "rock.png");
 
@@ -47,6 +45,20 @@ export const loadSprites = () => {
       anims: {
         idle: 7,
         walk: { from: 0, to: 7, loop: true },
+      },
+    },
+  });
+
+  loadSpriteAtlas("orc-walking.png", {
+    orc: {
+      x: 0,
+      y: 0,
+      width: 249,
+      height: 52,
+      sliceX: 4,
+      anims: {
+        idle: 0,
+        walk: { from: 0, to: 3, loop: true },
       },
     },
   });
