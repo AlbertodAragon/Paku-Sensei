@@ -1,30 +1,21 @@
-import { projectile } from "./weapons";
-import {
-  ENEMY_SPEED,
-  HERO_SPEED,
-  SPEED_BULLET,
-  RATIO_BULLET,
-} from "../contants/constants";
-
 export const playerHero = [
   sprite("hero"),
   pos(450, 350),
   health(3),
-  area({ scale: 0.9 }), // has a collider
+  area({ scale: 0.9 }),
   body({ isStatic: false }),
   "player",
   "friendly",
   "hero",
   {
-    // right by default
     dir: vec2(-0.5, 0),
   },
   state("idle", ["idle", "attack", "move"]),
   scale(1),
-  // flipX(false),
 ];
 
 export const playerLogic = (player, scoreLabel) => {
+  console.log("player2", player);
   player.play("idle");
 
   player.onCollide("dangerous", () => {

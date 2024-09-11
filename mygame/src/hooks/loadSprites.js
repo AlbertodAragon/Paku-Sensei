@@ -16,13 +16,24 @@ export const loadSprites = () => {
   loadSprite("skeletor", "Ei1VnX8.png");
   loadSprite("kaboom", "o9WizfI.png");
   loadSprite("stairs", "VghkL08.png");
-  loadSprite("bg", "u4DVsx6.png");
   loadSprite("bg2", "try_bg.png");
   loadSprite("bg-tau", "background-tau.png");
-  loadSprite("tau-right", "tau-right.png");
-  loadSprite("tau-left", "tau-left.png");
-  loadSprite("bullet", "bullet.png");
+
+  loadSprite("rifle", "rifle.png");
   loadSprite("rock", "rock.png");
+
+  loadSpriteAtlas("bullet-animation.png", {
+    bullet: {
+      x: 0,
+      y: 0,
+      width: 94,
+      height: 15,
+      sliceX: 3,
+      anims: {
+        shoot: { from: 0, to: 2, loop: true },
+      },
+    },
+  });
 
   loadSpriteAtlas("hero_sprites.png", {
     hero: {
@@ -37,8 +48,23 @@ export const loadSprites = () => {
       },
     },
   });
+
+  loadSpriteAtlas("orc-walking.png", {
+    orc: {
+      x: 0,
+      y: 0,
+      width: 249,
+      height: 52,
+      sliceX: 4,
+      anims: {
+        idle: 0,
+        walk: { from: 0, to: 3, loop: true },
+      },
+    },
+  });
 };
 
 export const loadSounds = () => {
   loadSound("shoot", "bullet-sound.mp3");
+  loadSound("sword", "sword-sound.mp3");
 };

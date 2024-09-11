@@ -5,6 +5,11 @@ const removeAttack = (attack) => {
 };
 
 export const projectile = (playerPos, closestEnemy, speed) => {
+  closestEnemy &&
+    play("shoot", {
+      volume: 0.2,
+    });
+
   const bullet = [
     sprite("bullet"),
     pos(playerPos),
@@ -14,14 +19,11 @@ export const projectile = (playerPos, closestEnemy, speed) => {
     scale(1),
     "bullet",
     "plasma",
-    state("idle", ["shoot"]),
+    state("shoot"),
   ];
 
   const bullets = closestEnemy && add(bullet);
-
-  play("shoot", {
-    volume: 0.2,
-  });
+  bullets?.play("shoot");
 
   bullets?.onCollide("dangerous", (enemy) => {
     removeAttack(bullets);
@@ -35,6 +37,10 @@ export const projectile = (playerPos, closestEnemy, speed) => {
 };
 
 export const meleeAttack = (position) => {
+  play("sword", {
+    volume: 0.2,
+  });
+
   const kaboom = add([sprite("kaboom"), area(2), pos(position), "kaboom"]);
 
   kaboom.onCollide("dangerous", (enemy) => {

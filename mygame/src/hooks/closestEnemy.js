@@ -4,7 +4,7 @@ import {
   SPEED_BULLET,
   RATIO_BULLET,
 } from "../contants/constants";
-import { projectile } from "../objects/weapons";
+import { projectile } from "../objects/attacks";
 
 export const getCloserEnemy = (playerPos) => {
   var allEnemies = get("dangerous");
@@ -13,7 +13,7 @@ export const getCloserEnemy = (playerPos) => {
 
   var goal = playerPos.x;
 
-  var closestEnemy = allEnemiesPosition.reduce((prev, curr) => {
+  var closestEnemy = allEnemiesPosition?.reduce((prev, curr) => {
     return Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev;
   });
 
